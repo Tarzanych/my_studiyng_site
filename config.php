@@ -1,6 +1,9 @@
 <?php
 
 session_start();
+/**
+ * Setting DB connection vars and site paths
+ */
 $config = array(
     "DB" => array(
         "db_host" => "localhost",
@@ -14,15 +17,22 @@ $config = array(
     "charset" => "UTF-8"
 );
 
+/**
+ * Defining system paths
+ */
 define('SNIPPETS_PATH', $config['absolutePath'] . "template/snippets/");
 define('MODULES_PATH', $config['absolutePath'] . "modules/");
 define('TEMPLATES_PATH', $config['absolutePath'] . "template/");
 define('ABSOLUTE_PATH', $config['absolutePath']);
 
 error_reporting(E_ALL | E_STRICT);
-
+/**
+ * Setting internal encoding
+ */
 mb_internal_encoding($config['charset']);
-
+/**
+ * Initialising PDO object
+ */
 $db = new PDO("mysql:host={$config['DB']['db_host']};dbname={$config['DB']['db_name']}", "{$config['DB']['db_user']}", "{$config['DB']['db_pass']}");
 $db->exec("	SET NAMES " . $config['charset'] . ";
 		SET CHARACTER SET " . $config['charset'] . ";");

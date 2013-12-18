@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * {$Page} var declared in functions.php
+ */
 $Page->OnGlobalBeforeDisplay();
 $Page->OnBeforeDisplay();
 include($config['absolutePath'] . "template/header.php");
