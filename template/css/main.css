@@ -414,3 +414,6 @@ a {
 .languageText {
     display: none;
 }
+.editLangConstantForm {
+    display: none;
+}

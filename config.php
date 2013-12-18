@@ -24,6 +24,6 @@ error_reporting(E_ALL | E_STRICT);
 mb_internal_encoding($config['charset']);
 
 $db = new PDO("mysql:host={$config['DB']['db_host']};dbname={$config['DB']['db_name']}", "{$config['DB']['db_user']}", "{$config['DB']['db_pass']}");
-$db->exec("	SET NAMES UTF8;
-		SET CHARACTER SET UTF8;");
+$db->exec("	SET NAMES " . $config['charset'] . ";
+		SET CHARACTER SET " . $config['charset'] . ";");
 ?>

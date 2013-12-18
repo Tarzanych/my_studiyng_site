@@ -23,11 +23,15 @@
             <? } ?>
             <td>
                 <a href="#" onclick="editLanguageVar('<?= $key ?>');
-                        return false;"><img src="<?= $this->RootUrl ?>template/img/edit.png" /></a>
+                        return false;">
+                    <img src="<?= $this->RootUrl ?>template/img/edit.png" />
+                </a>
                 <a href="#" onclick="if (confirm('Do you really want to delete variable &quot;<?= $key ?>&quot;')) {
                             deleteLanguageVar('<?= $key ?>');
                         }
-                        return false;"><img src="<?= $this->RootUrl ?>template/img/delete.png" /></a>
+                        return false;">
+                    <img src="<?= $this->RootUrl ?>template/img/delete.png" />
+                </a>
             </td>
         </tr>
     <? } ?>

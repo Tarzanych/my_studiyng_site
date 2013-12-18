@@ -1,6 +1,6 @@
 <? if ((isset($User->Permissions) && !$User->IsAnonymous && ($User->Permissions['create'] > 0 || $User->Permissions['root'] > 0 || $User->Permissions['admin'] > 0 )) && isset($User->IsActive) && $User->IsActive && isset($User->IsBlocked) && !$User->IsBlocked) { ?>
     <span class="createLink"><a href="#" onclick="openCreateForm();
-            return false;">Create content</a></span>
+            return false;"><?= t('Create content') ?></a></span>
     <? }
     ?>
 <div class="center pageTitle">
@@ -11,7 +11,7 @@
     if (count($this->ContentArray['content']) < $this->ContentArray['count']) {
         $pager = array("link" => $this->RootUrl,
             "pages_max" => ceil($this->ContentArray['count'] / $this->perPage),
-            "active" => $this->PageNum
+            "active" => $this->PageNum,
         );
         include SNIPPETS_PATH . "pager.php";
     }
@@ -23,7 +23,7 @@
     if (count($this->ContentArray['content']) < $this->ContentArray['count']) {
         $pager = array("link" => $this->RootUrl,
             "pages_max" => ceil($this->ContentArray['count'] / $this->perPage),
-            "active" => $this->PageNum
+            "active" => $this->PageNum,
         );
         include SNIPPETS_PATH . "pager.php";
     }

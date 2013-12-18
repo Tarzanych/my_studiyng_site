@@ -34,11 +34,14 @@
             <td class="center"><?= $cat['id'] ?></td>
             <td>
                 <? if ($User->Permissions['edit'] == 1 || $User->Permissions['root'] == 1 || $User->Permissions['admin'] == 1 || ($User->Permissions['editOwn'] == 1 && $cat['createUser'] == $User->Id)) { ?>
-                    <?= $tab ?><a href="#" onclick="editCategory(<?= $cat['id'] ?>);
-                                    return false;"><?= $cat['title'] ?></a>
-                   <? } else { ?>
-                       <?= $tab . $cat['title'] ?>
-                   <? } ?>
+                    <?= $tab ?>
+                    <a href="#" onclick="editCategory(<?= $cat['id'] ?>);
+                            return false;">
+                           <?= $cat['title'] ?>
+                    </a>
+                <? } else { ?>
+                    <?= $tab . $cat['title'] ?>
+                <? } ?>
             </td>
             <td class="center"><?= $cat['url'] ?></td>
             <td><?= (mb_strlen($cat['description']) > 150 ? mb_substr($cat['description'], 0, 150) . "..." : $cat['description']) ?></td>
@@ -69,7 +72,9 @@
                 theme: 'modern',
                 menubar: 'edit view format'
             });
-            return false;">Create category</a>
+            return false;">
+        Create category
+    </a>
 </div>
 <div class="createCatBlock profileBlock">
     <form action="" method="post" class="createCatForm">

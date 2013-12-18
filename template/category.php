@@ -1,6 +1,6 @@
 <? if ((isset($User->Permissions) && !$User->IsAnonymous && ($User->Permissions['create'] > 0 || $User->Permissions['root'] > 0 || $User->Permissions['admin'] > 0 )) && isset($User->IsActive) && $User->IsActive && isset($User->IsBlocked) && !$User->IsBlocked) { ?>
     <span class="createLink"><a href="#" onclick="openCreateForm();
-            return false;">Create content</a></span>
+            return false;"><?= t('Create content') ?></a></span>
     <? } ?>
 <div class="pageTitle center">
     <?= $this->Category['title'] ?>
