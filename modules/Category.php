@@ -14,12 +14,17 @@ class Category extends Page {
     public function OnBeforeDisplay() {
         global $db, $User;
 
-        if (GetOne("select count(`id`) from `category` where `publish`=1 and `url`=" . $db->quote(end($this->QueryElements))) > 0) {
-            $this->Category = $db->query("select * from `category` where `publish`=1 and `url`=" . $db->quote(end($this->QueryElements)))->fetch(PDO::FETCH_ASSOC);
+        if (GetOne("select count(`id`) from `category` where "
+            . "`publish`=1 and "
+            . "`url`=" . $db->quote(end($this->QueryElements))) > 0) {
+            $this->Category = $db->query("select * from `category` where "
+                . "`publish`=1 and "
+                . "`url`=" . $db->quote(end($this->QueryElements)))->fetch(PDO::FETCH_ASSOC);
             $this->CategoryIds[] = $this->Category['id'];
             $this->LoadSubCategories($this->Category['id']);
             $this->LoadCategories(0);
-            $sql = $db->query("select `id`, `title` from `category` where `parent`=" . $this->Category['id']);
+            $sql = $db->query("select `id`, `title` from `category` "
+                . "where `parent`=" . $this->Category['id']);
             if ($sql->rowCount() > 0) {
                 $subcategories = $sql->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($subcategories as $s) {
@@ -33,7 +38,18 @@ class Category extends Page {
             $page_sql = ($page - 1) * $this->perPage;
             $this->PageNum = $page;
 
-            $sql = $db->query("select  SQL_CALC_FOUND_ROWS c.*, l.`title` as 'contentTitle', l.`preText` as 'contentPreText', l.`totalText` as 'contentTotalText' from `content` c inner join `content_language` l on c.`id`=l.`content_id` and l.`language_id`=" . $db->quote($_SESSION['language']) . " where c.`category_id` in (" . implode(",", $this->CategoryIds) . ") and c.`publish`=1 order by `createTime` desc limit " . $page_sql . ", " . $this->perPage);
+            $sql = $db->query("select  SQL_CALC_FOUND_ROWS c.*, "
+                . "l.`title` as 'contentTitle', "
+                . "l.`preText` as 'contentPreText', "
+                . "l.`totalText` as 'contentTotalText' "
+                . "from `content` c "
+                . "inner join `content_language` l on c.`id`=l.`content_id` and "
+                . "l.`language_id`=" . $db->quote($_SESSION['language']) . " "
+                . "where "
+                . "c.`category_id` in (" . implode(",", $this->CategoryIds) . ") "
+                . "and c.`publish`=1 "
+                . "order by `createTime` desc "
+                . "limit " . $page_sql . ", " . $this->perPage);
 
             $foundRows = GetOne("SELECT FOUND_ROWS();");
             $content = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -46,11 +62,13 @@ class Category extends Page {
 
     protected function LoadCategories($parent, $level = 0) {
         global $db;
-        $categories = $db->query("select * from `category` where `parent` = '{$parent}' order by `title`");
+        $categories = $db->query("select * from `category` where "
+            . "`parent` = '{$parent}' order by `title`");
         foreach ($categories as $cat) {
             $cat['level'] = $level;
             $this->CatArray[] = $cat;
-            if (GetOne("select count(`id`) from `category` where `parent`={$cat['id']}")) {
+            if (GetOne("select count(`id`) from `category` where "
+                . "`parent`={$cat['id']}")) {
                 $this->LoadCategories($cat['id'], $level + 1);
             }
         }
@@ -58,12 +76,16 @@ class Category extends Page {
 
     protected function LoadSubCategories($parent, $level = 0) {
         global $db;
-        $categories = $db->query("select * from `category` where `publish`=1 and `parent` = '{$parent}' order by `title`");
+        $categories = $db->query("select * from `category` where "
+            . "`publish`=1 and "
+            . "`parent` = '{$parent}' order by `title`");
         foreach ($categories as $cat) {
             $cat['level'] = $level;
             $this->CategoryIds[] = $cat['id'];
 
-            if (GetOne("select count(`id`) from `category` where `publish`=1 and `parent`={$cat['id']}")) {
+            if (GetOne("select count(`id`) from `category` where "
+                . "`publish`=1 and "
+                . "`parent`={$cat['id']}")) {
                 $this->LoadSubCategories($cat['id'], $level + 1);
             }
         }

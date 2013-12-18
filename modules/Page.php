@@ -21,7 +21,8 @@ abstract class Page {
             $query = $_GET['q'];
         }
         $this->QueryElements = explode("/", $query);
-        $this->Languages = $db->query("select * from `languages` where 1 order by `default` desc")->fetchAll(PDO::FETCH_ASSOC);
+        $this->Languages = $db->query("select * from `languages` where 1 "
+                . "order by `default` desc")->fetchAll(PDO::FETCH_ASSOC);
         foreach ($this->QueryElements as $id => $q) {
             if ($q == "")
                 unset($this->QueryElements[$id]);
@@ -30,10 +31,22 @@ abstract class Page {
         if (isset($User->Permissions) && isset($_REQUEST['Action']) && !$User->IsBlocked && $User->IsActive) {
             switch ($_REQUEST['Action']) {
                 case "checkContent":
-                    $data = array("success" => false, "errors" => "", "publish" => false);
-                    if (isset($_POST['contentId']) && GetOne("select count(`id`) from `content` where `id` = " . intval($_POST['contentId'])) > 0) {
+                    $data = array(
+                        "success" => false,
+                        "errors" => "",
+                        "publish" => false
+                    );
+                    if (GetOne("select count(`id`) from `content` where `id` = " . intval($_POST['contentId'])) > 0) {
+                        $content_exists = true;
+                    } else {
+                        $content_exists = false;
+                    }
+                    if (isset($_POST['contentId']) && $content_exists) {
                         $data['success'] = true;
-                        $data['content'] = $db->query("select * from `content` where `id`='" . intval($_POST['contentId']) . "'")->fetch(PDO::FETCH_ASSOC);
+                        $data['content'] = $db->query("select * "
+                                . "from `content` "
+                                . "where `id`='" . intval($_POST['contentId']) . "'")->
+                            fetch(PDO::FETCH_ASSOC);
                         if ($User->CheckPermissions('publish') || ($User->CheckPermissions('publishOwn') && $data['content']['author'] == $User->Id)) {
                             $data['publish'] = true;
                         }
@@ -43,7 +56,10 @@ abstract class Page {
                         $data['content']['preText'] = array();
                         $data['content']['totalText'] = array();
                         $data['content']['title'] = array();
-                        $sql = $db->query("select * from `content_language` where `content_id`='{$data['content']['id']}'")->fetchAll(PDO::FETCH_ASSOC);
+                        $sql = $db->query("select * "
+                                . "from `content_language` "
+                                . "where `content_id`='{$data['content']['id']}'")->
+                            fetchAll(PDO::FETCH_ASSOC);
                         foreach ($sql as $lang) {
                             $data['content']['preText'][$lang['language_id']] = $lang['preText'];
                             $data['content']['totalText'][$lang['language_id']] = $lang['totalText'];
@@ -61,9 +77,15 @@ abstract class Page {
                         $title = (isset($_POST['title']) ? $_POST['title'] : array() );
                         $url = (isset($_POST['url']) ? trim($_POST['url']) : "" );
                         $mainText = (isset($_POST['mainText']) ? $_POST['mainText'] : array() );
-                        $cCheck = GetOne("select count(`id`) from `category` where `id`='{$category}'");
-                        $tCount = @GetOne("select count(`id`) from `content_language` where `title`=" . $db->quote($_POST['title']));
-                        $uCount = @GetOne("select count(`id`) from `content` where `url`=" . $db->quote($_POST['url']));
+                        $cCheck = GetOne("select count(`id`) "
+                            . "from `category` "
+                            . "where `id`='{$category}'");
+                        $tCount = @GetOne("select count(`id`) "
+                                . "from `content_language` "
+                                . "where `title`=" . $db->quote($_POST['title']));
+                        $uCount = @GetOne("select count(`id`) "
+                                . "from `content` where "
+                                . "`url`=" . $db->quote($_POST['url']));
                         if ($tCount > 0)
                             $data['errors'] .= "Another content with such title exists<br />";
                         if ($cCheck == 0 && $category != 0)
@@ -99,10 +121,19 @@ abstract class Page {
                                 $data['errors'] .= "User <b>{$newAuthor}</b> not found<br />";
                             }
                         }
-                        $cCheck = GetOne("select count(`id`) from `category` where `id`='{$category}'");
-                        $tCount = @GetOne("select count(`id`) from `content` where `id`<>'{$id}' and `title`=" . $db->quote($_POST['title']));
-                        $uCount = @GetOne("select count(`id`) from `content` where `id`<>'{$id}' and `url`=" . $db->quote($_POST['url']));
-                        if ($id == 0 || GetOne("select count(`id`) from `content` where `id`='{$id}'") == 0)
+                        $cCheck = GetOne("select count(`id`) "
+                            . "from `category` "
+                            . "where `id`='{$category}'");
+                        $tCount = @GetOne("select count(`id`) from `content` "
+                                . "where `id`<>'{$id}' and "
+                                . "`title`=" . $db->quote($_POST['title']));
+                        $uCount = @GetOne("select count(`id`) "
+                                . "from `content` "
+                                . "where `id`<>'{$id}' and "
+                                . "`url`=" . $db->quote($_POST['url']));
+                        if ($id == 0 || GetOne("select count(`id`) "
+                                . "from `content` "
+                                . "where `id`='{$id}'") == 0)
                             $data['errors'] .= "Content id error<br />";
                         if ($tCount > 0)
                             $data['errors'] .= "Another content with such title exists<br />";
@@ -137,11 +168,23 @@ abstract class Page {
                         $cCheck = GetOne("select count(`id`) from `category` where `id`='{$category}'");
                         $tCount = 0;
                         foreach ($title as $t) {
-                            $tCount += GetOne("select count(`id`) from `content_language` where `content_id`<>'{$id}' and `title`=" . ($db->quote($t)));
+                            $tCount += GetOne("select count(`id`) "
+                                . "from `content_language` "
+                                . "where `content_id`<>'{$id}' "
+                                . "and `title`=" . ($db->quote($t)));
                         }
-                        $uCount = GetOne("select count(`id`) from `content` where `url`=" . $db->quote($url));
+                        $uCount = GetOne("select count(`id`) "
+                            . "from `content` where "
+                            . "`url`=" . $db->quote($url));
                         if (count($title) > 0 && checkFilledArray($title) && mb_strlen($url) > 0 && count($mainText) > 0 && checkFilledArray($mainText) && ($cCheck > 0 || $category == 0) && $tCount == 0 && $uCount == 0) {
-                            $sql = $db->prepare("insert into `content` (`url`, `category_id`, `createTime`, `publishTime`, `author`, `publish`, `onFront`) values ( :url, :category, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), :user, :publish, :onfront)");
+                            $sql = $db->prepare("insert into `content` "
+                                . "(`url`, `category_id`, `createTime`, "
+                                . "`publishTime`, `author`, `publish`, "
+                                . "`onFront`) "
+                                . "values "
+                                . "( :url, :category, UNIX_TIMESTAMP(), "
+                                . "UNIX_TIMESTAMP(), :user, "
+                                . ":publish, :onfront)");
                             $sql->execute(array(
                                 ":url" => $url,
                                 ":category" => $category,
@@ -151,12 +194,21 @@ abstract class Page {
                             ));
                             $content_id = GetOne("select LAST_INSERT_ID();");
                             foreach ($preText as $id => $text) {
-                                $db->exec("insert into `content_language` (`title`,`content_id`, `language_id`, `preText`, `totalText`) values (" . $db->quote($title[$id]) . ",{$content_id},{$id}," . $db->quote($preText[$id]) . "," . $db->quote($mainText[$id]) . ")");
+                                $db->exec("insert into `content_language` "
+                                    . "(`title`,`content_id`, `language_id`, "
+                                    . "`preText`, `totalText`) "
+                                    . "values "
+                                    . "(" . $db->quote($title[$id]) . ","
+                                    . "{$content_id},{$id},"
+                                    . $db->quote($preText[$id]) . ","
+                                    . $db->quote($mainText[$id]) . ")");
                             }
                             $_SESSION['CreateSuccess'] = true;
                             $get = $_GET;
                             unset($get['q']);
-                            $goto = $this->RootUrl . implode("/", $this->QueryElements) . (count($get) > 0 ? "?" . http_build_query($get) : "" );
+                            $goto = $this->RootUrl
+                                . implode("/", $this->QueryElements)
+                                . (count($get) > 0 ? "?" . http_build_query($get) : "" );
                             $this->GoToUrl($goto);
                         }
                     }
@@ -165,7 +217,8 @@ abstract class Page {
                     $id = isset($_POST['contentId']) ? intval($_POST['contentId']) : 0;
                     if (((isset($User->Permissions['edit']) && $User->Permissions['edit'] == 1) || (isset($User->Permissions['editOwn']) && $User->Permissions['editOwn'] == 1 && GetOne("select count(`id`) from `content` where `id`='{$id}' and `author`={$User->Id}") > 0) || (isset($User->Permissions['root']) && $User->Permissions['root'] == 1) || (isset($User->Permissions['admin']) && $User->Permissions['admin'] == 1))) {
 // 							echo 1;
-                        if (GetOne("select count(`id`) from `content` where `id`='{$id}'") > 0) {
+                        if (GetOne("select count(`id`) "
+                                . "from `content` where `id`='{$id}'") > 0) {
 // 								echo 2;
                             $title = isset($_POST['contentTitle']) ? $_POST['contentTitle'] : array();
                             $url = isset($_POST['contentUrl']) ? trim($_POST['contentUrl']) : "";
@@ -177,19 +230,32 @@ abstract class Page {
                             $author = isset($_POST['contentAuthor']) ? trim($_POST['contentAuthor']) : "";
                             $authorId = GetOne("select `author` from `content` where `id`='{$id}'");
                             if (mb_strlen($author) > 0) {
-                                if (GetOne("select count(`id`) from `users` where `nickname` = " . $db->quote($author)) > 0) {
-                                    $authorId = GetOne("select `id` from `users` where `nickname`=" . $db->quote($author));
+                                if (GetOne("select count(`id`) from `users` "
+                                        . "where `nickname` = " . $db->quote($author)) > 0) {
+                                    $authorId = GetOne("select `id` from `users` "
+                                        . "where `nickname`=" . $db->quote($author));
                                 }
                             }
-                            $cCheck = GetOne("select count(`id`) from `category` where `id`='{$category}'");
+                            $cCheck = GetOne("select count(`id`) from `category` "
+                                . "where `id`='{$category}'");
                             $tCount = 0;
                             foreach ($title as $t) {
-                                $tCount += GetOne("select count(`id`) from `content_language` where `content_id`<>'{$id}' and `title`=" . ($db->quote($t)));
+                                $tCount += GetOne("select count(`id`) from `content_language` "
+                                    . "where `content_id`<>'{$id}' and "
+                                    . "`title`=" . ($db->quote($t)));
                             }
-                            $uCount = GetOne("select count(`id`) from `content` where `id`<>'{$id}' and `url`=" . $db->quote($url));
+                            $uCount = GetOne("select count(`id`) from `content` "
+                                . "where `id`<>'{$id}' "
+                                . "and `url`=" . $db->quote($url));
                             if (count($title) > 0 && checkFilledArray($title) && mb_strlen($url) > 0 && count($mainText) > 0 && checkFilledArray($mainText) && ($cCheck > 0 || $category == 0) && $tCount == 0 && $uCount == 0) {
 // 									echo 3;
-                                $sql = $db->prepare("update `content` set `url` = :url, `category_id` = :category, `author` = :user, `publish` = :publish, onFront = :onfront where `id` = :id");
+                                $sql = $db->prepare("update `content` set "
+                                    . "`url` = :url, "
+                                    . "`category_id` = :category, "
+                                    . "`author` = :user, "
+                                    . "`publish` = :publish, "
+                                    . "`onFront` = :onfront "
+                                    . "where `id` = :id");
                                 $sql->execute(array(
                                     ":id" => $id,
                                     ":url" => $url,
@@ -199,13 +265,20 @@ abstract class Page {
                                     ":onfront" => $onFront
                                 ));
                                 foreach ($preText as $key => $val) {
-                                    $db->exec("update `content_language` set `preText`=" . $db->quote($preText[$key]) . " , `title`=" . $db->quote($title[$key]) . ", `totalText`=" . $db->quote($mainText[$key]) . " where `language_id`=" . intval($key) . " and `content_id`='{$id}'");
+                                    $db->exec("update `content_language` set "
+                                        . "`preText`=" . $db->quote($preText[$key]) . " , "
+                                        . "`title`=" . $db->quote($title[$key]) . ", "
+                                        . "`totalText`=" . $db->quote($mainText[$key])
+                                        . " where `language_id`=" . intval($key)
+                                        . " and `content_id`='{$id}'");
 // 									
                                 }
                                 $_SESSION['UpdateSuccess'] = true;
                                 $get = $_GET;
                                 unset($get['q']);
-                                $goto = $this->RootUrl . implode("/", $this->QueryElements) . (count($get) > 0 ? "?" . http_build_query($get) : "" );
+                                $goto = $this->RootUrl
+                                    . implode("/", $this->QueryElements)
+                                    . (count($get) > 0 ? "?" . http_build_query($get) : "" );
                                 $this->GoToUrl($goto);
                             }
                         }
@@ -216,12 +289,17 @@ abstract class Page {
                     $data = array("success" => false, "errors" => "", "url" => "");
                     if ($User->CheckPermissions('delete') || ($User->CheckPermissions('deleteOwn') && GetOne("select count(`id`) from `content` where `id`='{$id}' and `author`={$User->Id}") > 0)) {
 
-                        if (GetOne("select count(`id`) from `content` where `id`='{$id}'") > 0) {
-                            $content = $db->query("select * from `content` where `id`='{$id}'")->fetch(PDO::FETCH_ASSOC);
+                        if (GetOne("select count(`id`) "
+                                . "from `content` "
+                                . "where `id`='{$id}'") > 0) {
+                            $content = $db->query("select * from `content` "
+                                    . "where `id`='{$id}'")->fetch(PDO::FETCH_ASSOC);
                             $urlArray = getFullCategoryUrl($content['category_id']);
                             $data['url'] = $this->RootUrl . implode("/", array_reverse($urlArray));
-                            $db->exec("delete from `content` where `id`='{$content['id']}'");
-                            $data['errors'] = "delete from `content` where `id`='{$content['id']}'";
+                            $db->exec("delete from `content` "
+                                . "where `id`='{$content['id']}'");
+                            $data['errors'] = "delete from `content` "
+                                . "where `id`='{$content['id']}'";
                             $data['success'] = true;
                         } else {
                             $data['errors'] = "No such content";
@@ -240,11 +318,19 @@ abstract class Page {
                 case "ChangeLanguage":
                     $data = array("success" => false);
                     $language = isset($_POST['language']) ? intval($_POST['language']) : 0;
-                    if ($language > 0 && GetOne("select count(`id`) from `languages` where `id`={$language}") > 0) {
-                        $language = $db->query("select * from `languages` where `id`={$language}")->fetch(PDO::FETCH_ASSOC);
+                    if (GetOne("select count(`id`) from `languages` where `id`={$language}") > 0) {
+                        $language_exists = true;
+                    } else {
+                        $language_exists = false;
+                    }
+                    if ($language > 0 && $language_exists) {
+                        $language = $db->query("select * from `languages` where "
+                                . "`id`={$language}")->fetch(PDO::FETCH_ASSOC);
                         $_SESSION['language'] = $language['id'];
                         if (!$User->IsAnonymous) {
-                            $db->exec("update `users` set `language`={$language['id']} where `id`={$User->Id}");
+                            $db->exec("update `users` set "
+                                . "`language`={$language['id']} "
+                                . "where `id`={$User->Id}");
                         }
                         $data['success'] = true;
                     }
@@ -319,7 +405,8 @@ abstract class Page {
     }
 
     public function getUser($id) {
-        return GetOne("select `nickname` from `users` where `id`={$id} and `deleted`=0");
+        return GetOne("select `nickname` from `users` where "
+            . "`id`={$id} and `deleted`=0");
     }
 
     public function getCategory($id) {

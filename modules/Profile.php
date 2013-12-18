@@ -17,14 +17,16 @@ class Profile extends Page {
     protected function GetProfile($id) {
         global $db, $User;
         if ($id > 0) {
-            $sql = $db->prepare("select * from `users` where `deleted`=0 and `id` = ? ");
+            $sql = $db->prepare("select * from `users` where "
+                . "`deleted`=0 and `id` = ? ");
             if ($sql) {
                 $sql->execute(array($id));
                 if ($sql->rowCount() > 0) {
                     $this->Error = false;
                     $this->Profile = $sql->fetch(PDO::FETCH_ASSOC);
                     $this->ProfileId = $this->Profile['id'];
-                    $sql = $db->query("select * from `permissions` where `user_id` = {$this->ProfileId}");
+                    $sql = $db->query("select * from `permissions` where "
+                        . "`user_id` = {$this->ProfileId}");
                     $this->ProfilePermissions = ($sql->rowCount() > 0 ? $sql->fetch(PDO::FETCH_ASSOC) : array());
                     if ($this->ProfileId == $User->Id) {
                         $this->MyProfile = true;
@@ -123,9 +125,20 @@ class Profile extends Page {
                                 }
                             }
                             if (mb_strlen($this->OperationsErrors) == 0) {
-                                $sql = $db->prepare("update `users` set `name` = :name, `surname` = :surname, `email` = :email " . ($passchange ? ", `password` = :password " : "") . ($avatarUpload ? ", `avatar` = :avatar " : "") . " where `id` = :id");
+                                $sql = $db->prepare("update `users` set "
+                                    . "`name` = :name, "
+                                    . "`surname` = :surname, "
+                                    . "`email` = :email "
+                                    . ($passchange ? ", `password` = :password " : "")
+                                    . ($avatarUpload ? ", `avatar` = :avatar " : "")
+                                    . " where `id` = :id");
                                 if ($sql) {
-                                    $execArr = array(":name" => $firstname, ":surname" => $secondname, ":email" => $email, ":id" => $this->ProfileId);
+                                    $execArr = array(
+                                        ":name" => $firstname,
+                                        ":surname" => $secondname,
+                                        ":email" => $email,
+                                        ":id" => $this->ProfileId
+                                    );
                                     if ($passchange) {
                                         $execArr[":password"] = md5($password);
                                     }
@@ -155,11 +168,13 @@ class Profile extends Page {
             $id = intval($this->QueryElements[2]);
             $this->GetProfile($id);
             if (!$this->Error && !$User->IsBlocked && (($this->MyProfile && $this->Profile['active'] == 1) || $User->Permissions['root'] == 1 || ($User->Permissions['admin'] == 1 && $this->ProfilePermissions['root'] == 0))) {
-                $sql = $db->prepare("update `users` set `deleted`=1 where `id` = ?");
+                $sql = $db->prepare("update `users` set "
+                    . "`deleted`=1 where `id` = ?");
                 if ($sql) {
                     $exec = $sql->execute(array($this->ProfileId));
                     if ($exec) {
-                        $db->exec("delete from `sessions` where `user_id`=" . $this->ProfileId);
+                        $db->exec("delete from `sessions` where "
+                            . "`user_id`=" . $this->ProfileId);
                         $this->TemplateName = "profile-delete-success.php";
                     } else {
                         $this->OperationsErrors .= "Database query error<br />";

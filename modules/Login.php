@@ -16,24 +16,47 @@ class Login extends Page {
                 );
                 $login = $_REQUEST['login'];
                 $password = md5($_REQUEST['password']);
-                $sql = $db->prepare("select * from `users` where `deleted`=0 and `nickname` = ? and `password` = ?");
+                $sql = $db->prepare("select * from `users` where "
+                    . "`deleted`=0 and "
+                    . "`nickname` = ? "
+                    . "and `password` = ?");
                 $sql->execute(array($login, $password));
                 if ($sql->rowCount() > 0) {
                     $data['success'] = true;
                     $tempUser = $sql->fetch(PDO::FETCH_ASSOC);
 
-                    $sql = $db->prepare("select * from `sessions` where `user_id` = ? and `lastActive` > UNIX_TIMESTAMP() - 3*24*3600 limit 1");
+                    $sql = $db->prepare("select * from `sessions` where "
+                        . "`user_id` = ? and "
+                        . "`lastActive` > UNIX_TIMESTAMP() - 3*24*3600 "
+                        . "limit 1");
                     $sql->execute(array($tempUser['id']));
                     if ($sql->rowCount() > 0) {
                         $sess = $sql->fetch(PDO::FETCH_ASSOC);
-                        $sql = $db->prepare("update `sessions` set `sess_id` = ? , `ip` = ? , `lastActive` = UNIX_TIMESTAMP() where `id` = ?");
-                        $sql->execute(array(session_id(), $_SERVER['REMOTE_ADDR'], $sess['id']));
+                        $sql = $db->prepare("update `sessions` set "
+                            . "`sess_id` = ? , "
+                            . "`ip` = ? , "
+                            . "`lastActive` = UNIX_TIMESTAMP() "
+                            . "where `id` = ?");
+                        $sql->execute(array(
+                            session_id(),
+                            $_SERVER['REMOTE_ADDR'],
+                            $sess['id'])
+                        );
                     } else {
-                        $sql = $db->prepare("insert into `sessions` (`sess_id`, `lastActive`, `user_id`, `ip`) values ( ? , UNIX_TIMESTAMP() , ? , ? ) ");
-                        $sql->execute(array(session_id(), $tempUser['id'], $_SERVER['REMOTE_ADDR']));
+                        $sql = $db->prepare("insert into `sessions` "
+                            . "(`sess_id`, `lastActive`, `user_id`, `ip`) "
+                            . "values "
+                            . "( ? , UNIX_TIMESTAMP() , ? , ? ) ");
+                        $sql->execute(array(
+                            session_id(),
+                            $tempUser['id'],
+                            $_SERVER['REMOTE_ADDR'])
+                        );
                     }
                     $_SESSION['language'] = $tempUser['language'];
-                    $sql = $db->prepare("update `users` set  `lastActive` = UNIX_TIMESTAMP() where `id` = ?");
+                    $sql = $db->prepare("update `users` set  "
+                        . "`lastActive` = UNIX_TIMESTAMP() "
+                        . "where `id` = ?");
                     $sql->execute(array($tempUser['id']));
                 } else {
                     $data['errors'] = "Login error. Please check your nickname and password";
@@ -43,7 +66,8 @@ class Login extends Page {
                 break;
         }
         if ($this->ReqUrl == "logout") {
-            $db->exec("delete from `sessions` where `sess_id` = '" . session_id() . "'");
+            $db->exec("delete from `sessions` where "
+                . "`sess_id` = '" . session_id() . "'");
             $this->GoToUrl($this->RootUrl);
             exit;
         }

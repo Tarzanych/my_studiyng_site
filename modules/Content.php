@@ -15,11 +15,39 @@ class Content extends Page {
                 case "SetVote":
                     $data = array("success" => false);
                     $vote = intval($_POST['vote']);
-                    if ($vote > 0 && $vote < 6 && isset($User) && $User->IsActive && !$User->IsBlocked && GetOne("select count(`id`) from `content` where `id`=" . intval($_POST['content'])) && !GetOne("select count(`id`) from `votes` where `content_id`=" . intval($_POST['content']) . " and `user_id`={$User->Id}")) {
-                        $db->exec("insert into `votes` (`vote`,`content_id`,`user_id`) values ({$vote}," . intval($_POST['content']) . ",'{$User->Id}')");
-                        $db->exec("update `content` set `rating`=(select (SUM(`vote`)/GREATEST(1,COUNT(`vote`))) from `votes` where `content_id`=" . intval($_POST['content']) . ") where `id`=" . intval($_POST['content']));
-                        $data['cnt'] = GetOne("select (COUNT(`vote`)) from `votes` where `content_id`=" . intval($_POST['content']));
-                        $data['rating'] = GetOne("select (SUM(`vote`)/GREATEST(1,COUNT(`vote`))) from `votes` where `content_id`=" . intval($_POST['content']));
+                    if (GetOne("select count(`id`) from `content` where "
+                            . "`id`=" . intval($_POST['content']))) {
+                        $content_exists = true;
+                    } else {
+                        $content_exists = false;
+                    }
+                    if (GetOne("select count(`id`) from `votes` where "
+                            . "`content_id`=" . intval($_POST['content']) . " and "
+                            . "`user_id`={$User->Id}")) {
+                        $has_voted = true;
+                    } else {
+                        $has_voted = false;
+                    }
+                    if ($vote > 0 && $vote < 6 && isset($User) && $User->IsActive && !$User->IsBlocked && $content_exists && !$has_voted) {
+                        $db->exec("insert into `votes` "
+                            . "(`vote`,`content_id`,`user_id`) "
+                            . "values "
+                            . "({$vote}," . intval($_POST['content'])
+                            . ",'{$User->Id}')");
+                        $db->exec("update `content` set `rating`="
+                            . "("
+                            . "select (SUM(`vote`)/GREATEST(1,COUNT(`vote`))) "
+                            . "from `votes` where "
+                            . "`content_id`=" . intval($_POST['content'])
+                            . ") "
+                            . "where `id`=" . intval($_POST['content']));
+                        $data['cnt'] = GetOne("select (COUNT(`vote`)) "
+                            . "from `votes` where "
+                            . "`content_id`=" . intval($_POST['content']));
+                        $data['rating'] = GetOne("select "
+                            . "(SUM(`vote`)/GREATEST(1,COUNT(`vote`))) "
+                            . "from `votes` where "
+                            . "`content_id`=" . intval($_POST['content']));
                         $data['success'] = true;
                     }
                     echo json_encode($data);
@@ -33,7 +61,10 @@ class Content extends Page {
                     $pagex = intval($_POST['page']) - 1;
                     if ($pagex < 0)
                         $pagex = 0;
-                    $sql = "select * from `comments` where `content_id`={$out['content']} order by `time` desc limit " . ($pagex * $this->comments) . ", {$this->comments}";
+                    $sql = "select * from `comments` where "
+                        . "`content_id`={$out['content']} "
+                        . "order by `time` desc "
+                        . "limit " . ($pagex * $this->comments) . ", {$this->comments}";
                     $row = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                     for ($i = 0, $count = sizeof($row); $i < $count; $i++) {
                         $out['comments'][] = array(
@@ -45,8 +76,10 @@ class Content extends Page {
                             "ip" => ($User->Permissions['root'] > 0 || $User->Permissions['admin'] > 0 ? $row[$i]['ip'] : "")
                         );
                     }
-
-                    $out['pages'] = ceil(($out['commentsCount'] = GetOne("select count(`id`) from `comments` where `content_id`={$out['content']}")) / $this->comments);
+                    $out['commentsCount'] = GetOne("select count(`id`) "
+                        . "from `comments` where "
+                        . "`content_id`={$out['content']}");
+                    $out['pages'] = ceil($out['commentsCount'] / $this->comments);
                     echo json_encode($out);
                     exit;
                     break;
@@ -54,16 +87,13 @@ class Content extends Page {
                     $data = array("success" => false);
                     if (isset($_POST['text']) && isset($_POST['content']) && !$User->IsAnonymous && $User->IsActive && !$User->IsBlocked && mb_strlen(trim($_POST['text'])) > 0 && GetOne("select `id` from `content` where `publish`=1 and `id`=" . intval($_POST['content'])) > 0) {
                         $sql = "INSERT INTO `comments` 
-									SET 
-										
-										
-										`text` = " . $db->quote(trim($_POST['text'])) . ",
-										`content_id` = '" . intval($_POST['content']) . "',
-										`time` = UNIX_TIMESTAMP(),
-										`user_id` = {$User->Id},
-										`ip` = " . $db->quote($_SERVER['REMOTE_ADDR']) . "
-										
-							";
+					SET 
+					`text` = " . $db->quote(trim($_POST['text'])) . ",
+					`content_id` = '" . intval($_POST['content']) . "',
+					`time` = UNIX_TIMESTAMP(),
+					`user_id` = {$User->Id},
+					`ip` = " . $db->quote($_SERVER['REMOTE_ADDR']) . "
+			";
                         $db->exec($sql);
                         $data['success'] = true;
                     }
@@ -73,7 +103,8 @@ class Content extends Page {
                 case "DeleteComment":
                     $data = array("success" => false);
                     if (isset($_POST['comment']) && ($User->Permissions['root'] > 0 || $User->Permissions['admin'] > 0) && $User->IsActive && !$User->IsBlocked && GetOne("select `id` from `comments` where `id`=" . intval($_POST['comment'])) > 0) {
-                        $sql = "delete from `comments` where `id`=" . intval($_POST['comment']);
+                        $sql = "delete from `comments` where "
+                            . "`id`=" . intval($_POST['comment']);
                         $db->exec($sql);
                         $data['success'] = true;
                     }
@@ -82,8 +113,20 @@ class Content extends Page {
                     break;
             }
         }
-        if (GetOne("select count(`id`) from `content` where `publish`=1 and  `url`=" . $db->quote(end($this->QueryElements))) > 0) {
-            $this->Content = $db->query("select c.*, l.`title` as 'contentTitle', l.`preText` as 'contentPreText', l.`totalText` as 'contentTotalText' from `content` c  inner join `content_language` l on c.`id`=l.`content_id` and l.`language_id`=" . $db->quote($_SESSION['language']) . " where c.`publish`=1 and  c.`url`=" . $db->quote(end($this->QueryElements)))->fetch(PDO::FETCH_ASSOC);
+        if (GetOne("select count(`id`) from `content` where "
+            . "`publish`=1 and  "
+            . "`url`=" . $db->quote(end($this->QueryElements))) > 0) {
+            $this->Content = $db->query("select c.*, "
+                . "l.`title` as 'contentTitle', "
+                . "l.`preText` as 'contentPreText', "
+                . "l.`totalText` as 'contentTotalText' from "
+                . "`content` c  "
+                . "inner join `content_language` l "
+                . "on c.`id`=l.`content_id` and "
+                . "l.`language_id`=" . $db->quote($_SESSION['language'])
+                . " where c.`publish`=1 and  "
+                . "c.`url`=" . $db->quote(end($this->QueryElements)))->
+                fetch(PDO::FETCH_ASSOC);
             $this->LoadCategories(0);
             $urlArray = getFullCategoryUrl($this->Content['category_id']);
             $this->FullUrl = $this->RootUrl . implode("/", array_reverse($urlArray)) . "/" . $this->Content['url'];
@@ -94,11 +137,13 @@ class Content extends Page {
 
     protected function LoadCategories($parent, $level = 0) {
         global $db;
-        $categories = $db->query("select * from `category` where `parent` = '{$parent}' order by `title`");
+        $categories = $db->query("select * from `category` where "
+            . "`parent` = '{$parent}' order by `title`");
         foreach ($categories as $cat) {
             $cat['level'] = $level;
             $this->CatArray[] = $cat;
-            if (GetOne("select count(`id`) from `category` where `parent`={$cat['id']}")) {
+            if (GetOne("select count(`id`) from `category` where "
+                . "`parent`={$cat['id']}")) {
                 $this->LoadCategories($cat['id'], $level + 1);
             }
         }

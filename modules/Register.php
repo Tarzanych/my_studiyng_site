@@ -39,21 +39,42 @@ class Register extends Page {
                         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                             $this->Errors[] = "Invalid email";
                         }
-                        $sql = $db->prepare("select count(`id`) as 'cnt' from `users` where  `nickname` = ? ");
+                        $sql = $db->prepare("select count(`id`) as 'cnt' "
+                            . "from `users` where  `nickname` = ? ");
                         $sql->execute(array($nickname));
 
                         if ($sql->rowCount() > 0 && $sql->fetchObject()->cnt > 0) {
                             $this->Errors[] = 'User <span class="bold">' . $nickname . '</span> already registered';
                         }
-                        $sql = $db->prepare("select count(`id`) as 'cnt'  from `users` where `email` = ? ");
+                        $sql = $db->prepare("select count(`id`) as 'cnt'  "
+                            . "from `users` where `email` = ? ");
                         $sql->execute(array($email));
                         if ($sql->rowCount() > 0 && $sql->fetchObject()->cnt > 0) {
                             $this->Errors[] = 'User with email <span class="bold">' . $email . '</span> is already registered';
                         }
                         if (count($this->Errors) == 0) {
                             $activateCode = $this->genRandomString();
-                            $language = GetOne("select ifnull(`id`,1) from `languages` where 1 order by `default` desc limit 1");
-                            $sql = $db->prepare("insert into `users` (`nickname`, `password`, `email`, `regDate`, `language`, `name`, `surname`, `activateCode`) values (:nickname , :password , :email , UNIX_TIMESTAMP() , :language, :firstname , :secondname , :activateCode )");
+                            $language = GetOne("select ifnull(`id`,1) from "
+                                . "`languages` where 1 "
+                                . "order by `default` desc limit 1");
+                            $sql = $db->prepare("insert into `users` "
+                                . "(`nickname`, "
+                                . "`password`, "
+                                . "`email`, "
+                                . "`regDate`, "
+                                . "`language`, "
+                                . "`name`, "
+                                . "`surname`, "
+                                . "`activateCode`) "
+                                . "values "
+                                . "(:nickname ,"
+                                . " :password ,"
+                                . " :email ,"
+                                . " UNIX_TIMESTAMP() ,"
+                                . " :language,"
+                                . " :firstname ,"
+                                . " :secondname ,"
+                                . " :activateCode )");
                             if ($sql) {
                                 $arr = array(
                                     ":nickname" => $nickname,
@@ -68,10 +89,10 @@ class Register extends Page {
                                 if ($exec) {
                                     $this->TemplateName = "register-success.php";
                                     $letter = '<div style="font-style:bold; padding-bottom: 20px">Thank you for your registration on our site!</div>
-										Please follow <a href="' . $this->RootUrl . 'register?Action=activate&code=' . $activateCode . '">this link</a> to activate your account<br />
-										<br />
-										Best regards,<br />
-										Drupal [nOob] community';
+						Please follow <a href="' . $this->RootUrl . 'register?Action=activate&code=' . $activateCode . '">this link</a> to activate your account<br />
+						<br />
+						Best regards,<br />
+						Drupal [nOob] community';
 
                                     $headers = array();
                                     $headers[] = "MIME-Version: 1.0";
@@ -103,7 +124,9 @@ class Register extends Page {
                                     $user = $sql->fetch(PDO::FETCH_ASSOC);
                                     $success = true;
                                     if (!$user['active']) {
-                                        $db->query("update `users` set `active` = 1 where `id` = {$user['id']}");
+                                        $db->query("update `users` set "
+                                            . "`active` = 1 where "
+                                            . "`id` = {$user['id']}");
                                     } else {
                                         $this->AlreadyActivated = true;
                                     }
