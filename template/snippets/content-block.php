@@ -13,7 +13,7 @@
     </div>
     <div class="contentBottom">
         <div class="user"><a href="<?= $this->RootUrl ?>profile/<?= $cont['author'] ?>"><?= $this->getUser($cont['author']) ?></a>, <?= date("d.m.Y H:i", $cont['createTime']) ?></div>
-        <div class="more"><a href="<?= $fullUrl ?>">Read more...</a></div>
+        <div class="more"><a href="<?= $fullUrl ?>"><?= t('Read more...') ?></a></div>
 
         <div class="clear"></div>
     </div>
