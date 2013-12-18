@@ -1,416 +1,416 @@
 body {
-	margin: 0;
-	padding: 0;
-	background: #EEE;
-	color: #000;
-	font-family: Verdana;
+    margin: 0;
+    padding: 0;
+    background: #EEE;
+    color: #000;
+    font-family: Verdana;
 }
 a {
-	color: #000;
-	text-decoration: underline;
+    color: #000;
+    text-decoration: underline;
 }
 .clear {
-	clear: both;
+    clear: both;
 }
 .right {
-	float: right;
+    float: right;
 }
 .mainDiv {
-	box-shadow: 2px 2px 5px #999;
-	width: 1200px;
-	margin: 0 auto
+    box-shadow: 2px 2px 5px #999;
+    width: 1200px;
+    margin: 0 auto
 }
 .header {
-	height: 200px;
-	margin: 0 auto;
-	background: #99F;
-	position: relative;
+    height: 200px;
+    margin: 0 auto;
+    background: #99F;
+    position: relative;
 }
 .header .logo {
-	position: absolute;
-	margin-top: 10px;
-	margin-left: 50px;
+    position: absolute;
+    margin-top: 10px;
+    margin-left: 50px;
 }
 .content {
-	min-height: 300px;
-	background: #FFF;
-	margin: 0 auto;
-	padding: 8px;
+    min-height: 300px;
+    background: #FFF;
+    margin: 0 auto;
+    padding: 8px;
 }
 .footer {
-	height: 48px;
-	position: relative;
-	margin: 0 auto;
-	background: #CCF;
+    height: 48px;
+    position: relative;
+    margin: 0 auto;
+    background: #CCF;
 }
 .searchBlock {
-	position: absolute;
-	width: 300px;
-	top: 50px;
-	right: 30px;
+    position: absolute;
+    width: 300px;
+    top: 50px;
+    right: 30px;
 }
 .flags {
-	position: absolute;
-	top: 10px;
-	right: 20px;
+    position: absolute;
+    top: 10px;
+    right: 20px;
 }
 .searchBlock div {
-	display: inline-block;
+    display: inline-block;
 }
 .searchBlock input[type='text'] {
-	border-radius: 4px;
-	background: #99F;
-	border: 3px solid #FFF;
-	color: #FFF;
-	padding: 3px;
+    border-radius: 4px;
+    background: #99F;
+    border: 3px solid #FFF;
+    color: #FFF;
+    padding: 3px;
 }
 .searchBlock button {
-	vertical-align: middle;
-	border: transparent;
-	background: transparent;
+    vertical-align: middle;
+    border: transparent;
+    background: transparent;
 }
 .menuBlock {
-	height: 48px;
-	background: #D0D0FF;
-	text-align: center;
-	position: relative;
+    height: 48px;
+    background: #D0D0FF;
+    text-align: center;
+    position: relative;
 }
 .menuBlock ul {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
 }
 .menuBlock a {
-	text-decoration: none;
+    text-decoration: none;
 }
 .menuBlock > ul > li {
-	display: inline-block;
-	margin: 0 6px;
-	padding: 0 6px;
-	line-height: 48px;
-	vertical-align: top;
-	position: relative;
-	background: #F0F0FF;
-	border-left: 1px solid transparent;
-	border-right: 1px solid transparent;
+    display: inline-block;
+    margin: 0 6px;
+    padding: 0 6px;
+    line-height: 48px;
+    vertical-align: top;
+    position: relative;
+    background: #F0F0FF;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
 }
 
 .menuBlock > ul > li:hover {
-	background: #F0F0F0;
-	border-left: 1px solid #FFF;
-	border-right: 1px solid #FFF;
+    background: #F0F0F0;
+    border-left: 1px solid #FFF;
+    border-right: 1px solid #FFF;
 }
 .menuBlock > ul > li ul {
-	display: none;
-	margin: 0 6px;
-	line-height: 48px;
-	vertical-align: top;
-	text-align: left;
+    display: none;
+    margin: 0 6px;
+    line-height: 48px;
+    vertical-align: top;
+    text-align: left;
 }	
 .accountBlock {
-	position: absolute;
-	right: 10px;
-	bottom: 10px;
-	font-size: 11px;
-	color: #FFF;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 11px;
+    color: #FFF;
 }
 .accountBlock > div {
-	display: inline-block;
-	position: relative;
+    display: inline-block;
+    position: relative;
 }
 .accountBlock a {
-	font-weight: bold;
-	color: #FFF;
+    font-weight: bold;
+    color: #FFF;
 }
 .accountBlock a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 .center {
-	text-align: center;
+    text-align: center;
 }
 .pageTitle {
-	padding: 8px 0;
-	font-size: 16px;
-	font-weight: bold;
+    padding: 8px 0;
+    font-size: 16px;
+    font-weight: bold;
 }
 .regForm, .loginForm {
-	display: none;
-	position: absolute;
-	right: 0;
-	z-index: 1000;
-	margin: 3px 0;
-	padding: 5px;
-	border: 2px solid #EEE;
-	background: #b7b7ff;
-	border-radius: 4px;
+    display: none;
+    position: absolute;
+    right: 0;
+    z-index: 1000;
+    margin: 3px 0;
+    padding: 5px;
+    border: 2px solid #EEE;
+    background: #b7b7ff;
+    border-radius: 4px;
 }
 .registerBlock {
-	margin: 10px;
-	border-radius: 8px;
-	background: #AEAEFF;
-	width: 500px;
-	padding: 6px;
-	margin: 0 auto;
+    margin: 10px;
+    border-radius: 8px;
+    background: #AEAEFF;
+    width: 500px;
+    padding: 6px;
+    margin: 0 auto;
 }
 .errorsBlock {
-	margin: 10px;
-	border-radius: 8px;
-	background: #FFAEAE;
-	width: 500px;
-	padding: 6px;
-	margin: 6px;
+    margin: 10px;
+    border-radius: 8px;
+    background: #FFAEAE;
+    width: 500px;
+    padding: 6px;
+    margin: 6px;
 }
 .regerrorsBlock {
-	margin: 10px;
-	border-radius: 8px;
-	background: #FFAEAE;
-	width: 500px;
-	padding: 6px;
-	margin: 6px auto;
+    margin: 10px;
+    border-radius: 8px;
+    background: #FFAEAE;
+    width: 500px;
+    padding: 6px;
+    margin: 6px auto;
 }
 .registerBlock tr > td:first-child {
-	width: 200px;
+    width: 200px;
 }
 .registerBlock tr > td {
-	padding: 2px 0;
-	vertical-align: top;
+    padding: 2px 0;
+    vertical-align: top;
 }
 .registerBlock input {
-	background: #FFF;
-	border: none;
-	border-radius: 4px;
-	padding: 3px;
-	width: 260px;
+    background: #FFF;
+    border: none;
+    border-radius: 4px;
+    padding: 3px;
+    width: 260px;
 }
 .registerButton, .profileBlock input[type='submit'] {
-	background: #AEAEFF;
-	border: none;
-	border-radius: 8px;
-	padding: 4px;
-	font-size: 18px;
-	font-weight: bold;
-	margin-top: 15px;
+    background: #AEAEFF;
+    border: none;
+    border-radius: 8px;
+    padding: 4px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
 }
 .registerForm .valDesc {
-	font-size: 65%;
+    font-size: 65%;
 }
 .bold {
-	font-weight: bold;
+    font-weight: bold;
 }
 .normal {
-	font-weight: normal;
+    font-weight: normal;
 }
 .small {
-	font-size: 70%;
+    font-size: 70%;
 }
 .red {
-	color: #F00;
+    color: #F00;
 }
 .green {
-	color: green;
+    color: green;
 }
 .padding-bottom {
-	padding-bottom: 10px;
+    padding-bottom: 10px;
 }
 .profileBlock {
-	font-size: 14px;
+    font-size: 14px;
 }
 .profileBlock .row > div {
-	display: inline-block;
-	vertical-align: top;
+    display: inline-block;
+    vertical-align: top;
 }
 .profileBlock .row > div:first-child {
-	width: 200px;
+    width: 200px;
 }
 .profileBlock .row > div.avatar {
-	width: 150px;
-	height: 150px;
-	margin: 0 10px 10px 0;
-	border: 3px solid #EEF;
+    width: 150px;
+    height: 150px;
+    margin: 0 10px 10px 0;
+    border: 3px solid #EEF;
 }
 .profileBlock input[type='text'], .profileBlock input[type='password'], .profileBlock select {
-	border: 1px solid #DDF;
-	border-radius: 5px;
-	padding: 3px;
-	margin: 2px 0;
-	width: 230px;
+    border: 1px solid #DDF;
+    border-radius: 5px;
+    padding: 3px;
+    margin: 2px 0;
+    width: 230px;
 }
 .createCatBlock input[type='text'], .createCatBlock input[type='password'], .createCatBlock select {
-	width: 540px;
+    width: 540px;
 }
 .editCatBlock input[type='text'], .editCatBlock input[type='password'], .editCatBlock select {
-	width: 540px;
+    width: 540px;
 }
 .createContentBlock input[type='text'], .createContentBlock input[type='password'], .createContentBlock select {
-	width: 540px;
+    width: 540px;
 }
 .createContentForm input[type='text'], .createContentForm input[type='password'], .createContentForm select {
-	width: 540px;
+    width: 540px;
 }
 .createContentBlock textarea {
-	width: 800px;
-	height: 200px;
+    width: 800px;
+    height: 200px;
 }
 .createCatBlock, .editCatBlock, .createContentBlock, .editContentBlock, .createLangConstantBlock {
-	display: none;
+    display: none;
 }
 .editContentBlock input[type='text'], .editContentBlock input[type='password'], .editContentBlock select {
-	width: 540px;
+    width: 540px;
 }
 .editContentBlock textarea {
-	width: 800px;
-	height: 200px;
+    width: 800px;
+    height: 200px;
 }
 .editCatBlock, .editCatBlock, .editContentBlock {
-	display: none;
+    display: none;
 }
 .profileBlock textarea {
-	 width: 230px;
-	 height: 200px;
+    width: 230px;
+    height: 200px;
 }
 .adminMenu > div {
-	display: inline-block;
-	margin: 4px;
-	padding: 5px;
-	font-weight: bold;
-	background: #DDF;
+    display: inline-block;
+    margin: 4px;
+    padding: 5px;
+    font-weight: bold;
+    background: #DDF;
 }
 .adminMenu > div.active {
-	background: #AFA;
+    background: #AFA;
 }
 .adminTable {
 
-	border-collapse: separate;
-	border-spacing: 3px;
+    border-collapse: separate;
+    border-spacing: 3px;
 }
 .adminTable td {
-	margin: 4px;
-	padding: 2px;
-	background: #DDF;
-	font-size: 13px;
+    margin: 4px;
+    padding: 2px;
+    background: #DDF;
+    font-size: 13px;
 }
 .adminTable tr:first-child td {
-	font-weight: bold;
-	text-align: center;
-	border-bottom: 1px solid #00F;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 1px solid #00F;
 }
 .usersTable tr td:first-child {
-	width: 50px;
+    width: 50px;
 }
 .usersTable tr td:not(:first-child) {
-	width: 170px;
+    width: 170px;
 }
 .catTable tr td:first-child {
-	width: 50px;
+    width: 50px;
 }
 .catTable tr td:last-child img {
-	margin: 0 5px;
+    margin: 0 5px;
 }
 .catTable tr td:not(:first-child) {
-	width: 125px;
+    width: 125px;
 }
 .catTable tr td:nth-child(2), .catTable tr td:nth-child(4) {
-	width: 220px;
+    width: 220px;
 }
 
 .contentTable tr td:first-child {
-	width: 40px;
+    width: 40px;
 }
 
 .contentTable tr td:last-child img {
-	margin: 0 5px;
+    margin: 0 5px;
 }
 .contentTable tr td:not(:first-child) {
-	width: 125px;
+    width: 125px;
 }
 .contentTable tr td:last-child {
-	width: 60px;
+    width: 60px;
 }
 .contentTable tr td:nth-child(2) {
-	width: 280px;
+    width: 280px;
 }
 .contentTable tr td:nth-child(4) {
-	width: 150px;
+    width: 150px;
 }
 .contentTable tr td:nth-child(5), .contentTable tr td:nth-child(6) {
-	width: 100px;
+    width: 100px;
 }
 .usersTable .deleted {
-	opacity: 0.5;
+    opacity: 0.5;
 }
 .column1, .column2 {
-	width: 49%;
-	float: left;
-	vertical-align: top;
+    width: 49%;
+    float: left;
+    vertical-align: top;
 }
 .profileBlock .permission {
-	cursor: hand;
-	cursor: pointer;
+    cursor: hand;
+    cursor: pointer;
 }
 .imagesCache {
-	display: none;
+    display: none;
 }
 .pager {
-	text-align: right;
+    text-align: right;
 }
 .pager span.active a {
-	font-weight: bold;
-	color: #F00;
+    font-weight: bold;
+    color: #F00;
 }
 .contentBlock {
-	margin: 5px;
-	box-shadow: 2px 2px 2px #999;
-	border: 1px solid #CCC;
-	background: #EEF;
-	margin-bottom: 20px;
+    margin: 5px;
+    box-shadow: 2px 2px 2px #999;
+    border: 1px solid #CCC;
+    background: #EEF;
+    margin-bottom: 20px;
 }
 .contentBlock .contentTitle {
-	background: #E0E0FF;
-	padding: 4px;
+    background: #E0E0FF;
+    padding: 4px;
 }
 .contentBlock .contentTitle .right {
-	font-size: 13px;
+    font-size: 13px;
 }
 .contentBlock .contentText {
-	padding: 6px;
-	background: #FFF
+    padding: 6px;
+    background: #FFF
 }
 .contentBlock .contentBottom {
-	position: relative;
-	font-size: 14px;
-	padding: 4px;
+    position: relative;
+    font-size: 14px;
+    padding: 4px;
 }
 .contentBlock .contentBottom .user {
-	float: right;
+    float: right;
 }
 .contentBlock .contentBottom .rating {
-	float: left;
+    float: left;
 }
 .createLink {
-	float: right;
+    float: right;
 }
 .stars .star {
-	cursor: hand;
-	cursor: pointer;
+    cursor: hand;
+    cursor: pointer;
 }
 .commentTextarea {
-	width: 100%;
-	height: 100px;
-	border: none;
+    width: 100%;
+    height: 100px;
+    border: none;
 }
 .commentSend {
-	background: #AEAEFF;
-	border: none;
-	border-radius: 8px;
-	padding: 4px;
-	font-size: 18px;
-	font-weight: bold;
-	margin: 5px;
+    background: #AEAEFF;
+    border: none;
+    border-radius: 8px;
+    padding: 4px;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px;
 }
 .pagesLine {
-	float: right;
-	font-weight: normal
+    float: right;
+    font-weight: normal
 }
 .languageText {
-	display: none;
+    display: none;
 }

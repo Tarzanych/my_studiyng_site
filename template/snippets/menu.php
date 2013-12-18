@@ -1,5 +1,5 @@
-				<div class="menuBlock">
-					
-					<?=$MainMenu->generateMenu()?>
-					
-				</div>
+<div class="menuBlock">
+
+    <?= $MainMenu->generateMenu() ?>
+
+</div>
